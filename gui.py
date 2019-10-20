@@ -25,6 +25,7 @@ import zipfile
 from AutoComplete import AutocompleteCombobox
 from distutils.version import LooseVersion
 import binascii
+import urllib.request
 import sys
 import sqlite3
 
@@ -558,8 +559,7 @@ class RootWindow(tk.Tk):
             with open('config.json','r') as cfg:
                 config=json.load(cfg)                
                 site=config['keysite']
-                if fnku.hashlib.md5(site.encode('utf-8')).hexdigest() == fnku.KEYSITE_MD5:
-                    self.update_keysite_widgets()
+                self.update_keysite_widgets()
                     
         except IOError:
             pass
@@ -1116,17 +1116,7 @@ class RootWindow(tk.Tk):
             ver=LooseVersion(i.split('/')[4][1:-4])
             fnku_all.append(str(ver))
         fnku_newest=max(fnku_all)
-        
-        for i in gui_data_set:
-            ver=LooseVersion(i.split('/')[4][1:-4])
-            if ver > LooseVersion('2.0.5'):
-                gui_all.append(ver)
-                
-        gui_newest=max(gui_all)
-        if gui_newest > current_gui or fnku_newest > current_fnku:
-            self.notify_of_update()
-        else:
-            self.notify_of_update(update=False)
+
             
 
         self.versions['fnku_all']=fnku_all
